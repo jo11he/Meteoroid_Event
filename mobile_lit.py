@@ -18,9 +18,9 @@ import streamlit.components.v1 as components
 ###### LAYOUT                              ###############
 
 
-title_str = "Can we see meteorite events in Mercury's Helium Exosphere ?"
+title_str = "Can we see meteorite events in Mercury's Helium Exosphere?"
 subheader_str1 = "While working on a steady-state model for Mercury's Helium exosphere, " \
-                "we began to wonder if transient events, such as Meteorite Impact Events (MIEs), could cause a detectable enrichment of the Helium abundance." \
+                "we began to wonder if transient events, such as Meteorite Impact Events (MIEs), could cause a detectable enrichment of the Helium abundance. " \
                 "We provide this platform so that you can explore the signature of MIEs yourself."
 
 text_str1 = "Of course, the signature of an MIE depends on in the size of the impactor, whereby the population of impactors of a given size are modelled by the characteristic velocity of their polulation (see e.g. Mangano et al. 2007). " \
@@ -136,14 +136,14 @@ def animate(frame, grid_dict, mappable, txt):
 ###### FIGURE SETUP                         ##############
 
 
-font = {'size'   : 10}
+font = {'size'   : 7}
 
 matplotlib.rc('font', **font)
 #matplotlib.rcParams['xtick.major.pad']='3'
-matplotlib.rcParams['ytick.major.pad']='10'
+matplotlib.rcParams['ytick.major.pad']='5'
 
 # create figure object
-fig = plt.figure(figsize=[7, 8], layout="constrained")
+fig = plt.figure(figsize=[3.5, 4], layout="constrained")
 # load axis box
 ax = fig.add_axes([0.1,0.1,0.8,0.8], polar=True)
 ax.set_theta_zero_location("N")
@@ -152,9 +152,9 @@ ax.set_ylim([0,max(radial_steps)])
 ax.set_xlim([-max(np.deg2rad(ext_psi_angles)),max(np.deg2rad(ext_psi_angles))])
 
 # ax.set_xlabel("Radial Distance [km]", loc='right')
-ax.text(0.6, 0.12, f"Radial Distance [km]", transform=ax.transAxes)
+ax.text(0.6, 0.1, f"Radial Distance [km]", transform=ax.transAxes)
 # ax.set_ylabel("Polar Angle [deg]")
-ax.set_title(f"Signature of Meteorite Impact Event in Helium Exophere", fontsize=15)
+ax.set_title(f"Signature of MIE in Helium Exophere", fontsize=10)
 
 ax.tick_params(axis='y', labelrotation=45)
 
@@ -169,7 +169,7 @@ textstr = f'Impactor Radius: {log_label_format_func(user_var1)}\n' \
 props = dict(boxstyle='round', facecolor="#a484ac", alpha=0.3)
 
 # place a text box in upper left in axes coords
-ax.text(0.75, 0.95, textstr, transform=ax.transAxes, fontsize=11,
+ax.text(0.7, 0.95, textstr, transform=ax.transAxes, fontsize=7,
         verticalalignment='top', bbox=props)
 
 
@@ -186,7 +186,7 @@ cbar.ax.set_xlabel('Helium enrichment w.r.t. background [-]', rotation=0)
 ###### PRODUCT                              ##############
 
 ani = animation.FuncAnimation(fig, animate, frames=times, fargs=(data_dict, cmp, dyna_txt), interval=1000)
-components.html(ani.to_jshtml(), height=900, scrolling=True)
+components.html(ani.to_jshtml(), height=500, scrolling=True)
 
 
 st.divider()
@@ -206,7 +206,7 @@ st.write('\n')
 col1, col2, col3 = st.columns(3)
 
 with col2:
-    st.image("portrait_circle_black.jpg", width=300, caption="Thank you for visiting!")
+    st.image("portrait_circle_black.jpg", width=200, caption="Thank you for visiting!")
 
 st.divider()
 
@@ -226,10 +226,10 @@ text-decoration: underline;
 
 .footer {
 position: fixed;
-left: 400;
+left: 300;
 bottom: 0;
 width: 18.5%;
-min-width: 705px;
+min-width: 400px;
 background-color: #a484ac;
 color: black;
 text-align: center;
