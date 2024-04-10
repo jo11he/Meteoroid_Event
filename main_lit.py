@@ -17,6 +17,8 @@ import streamlit.components.v1 as components
 ##########################################################
 ###### LAYOUT                              ###############
 
+st.set_page_config(layout='wide')
+
 
 title_str = "Can we see meteorite events in Mercury's Helium Exosphere ?"
 subheader_str1 = "While working on a steady-state model for Mercury's Helium exosphere, " \
@@ -61,24 +63,6 @@ def x_label_format_func(opt):
 
 st.write("\n")
 
-user_var1 = st.select_slider(
-    label=f'slide here to set impactor size [m]',
-    options=[-1, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-    format_func=log_label_format_func,
-    value=0)
-
-
-st.write("\n")
-
-
-user_var2 = st.select_slider(
-    label='slide here to set Helium Source Volume, relative to Vapor Volume [-]',
-    options=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2],
-    format_func=x_label_format_func,
-    value=0)
-    
-scaling_factor = (10**user_var1)**3 * (10**user_var2)
-st.write("\n")
 
 
 st.write("Use the Control Bar of the HTML to start replay of the animation.")
@@ -132,6 +116,42 @@ def animate(frame, grid_dict, mappable, txt):
 
 
 
+
+ani_column, slider_column = st.columns([0.5, 0.5])
+
+
+
+with slider_column:
+
+
+    st.text("")
+    st.text("")
+    st.text("")
+
+    user_var1 = st.select_slider(
+        label=f'slide here to set impactor size [m]',
+        options=[-1, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+        format_func=log_label_format_func,
+        value=0)
+
+
+    st.write("\n")
+
+
+    user_var2 = st.select_slider(
+        label='slide here to set Helium Source Volume, relative to Vapor Volume [-]',
+        options=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2],
+        format_func=x_label_format_func,
+        value=0)
+        
+    scaling_factor = (10**user_var1)**3 * (10**user_var2)
+    st.write("\n")
+
+
+
+
+
+
 ##########################################################
 ###### FIGURE SETUP                         ##############
 
@@ -143,7 +163,7 @@ matplotlib.rc('font', **font)
 matplotlib.rcParams['ytick.major.pad']='10'
 
 # create figure object
-fig = plt.figure(figsize=[7, 8], layout="constrained")
+fig = plt.figure(figsize=[8, 9], layout="constrained")
 # load axis box
 ax = fig.add_axes([0.1,0.1,0.8,0.8], polar=True)
 ax.set_theta_zero_location("N")
@@ -185,14 +205,21 @@ cbar.ax.set_xlabel('Helium enrichment w.r.t. background [-]', rotation=0)
 ##########################################################
 ###### PRODUCT                              ##############
 
-ani = animation.FuncAnimation(fig, animate, frames=times, fargs=(data_dict, cmp, dyna_txt), interval=1000)
-components.html(ani.to_jshtml(), height=900, scrolling=True)
+
+with ani_column:
+
+    ani = animation.FuncAnimation(fig, animate, frames=times, fargs=(data_dict, cmp, dyna_txt), interval=1000)
+    components.html(ani.to_jshtml(), height=1100, scrolling=True)
+
+
 
 
 st.divider()
 
 st.write("From this analysis we can conclude that typical 0.5-1m sized impactors can create a significant enhancement Helium exosphere, the temporal and spatial extend of which depends on the Helium Source Volume. "
          "With Helium release from all melt and ejecta (i.e. x100), a 0.5m object creates is visible at a detectable signature over an extend of +/- 30$^\circ$, which exists for a few thousand seconds within our domain of interest.")
+
+
 
 
 
@@ -226,9 +253,9 @@ text-decoration: underline;
 
 .footer {
 position: fixed;
-left: 400;
+left: 0;
 bottom: 0;
-width: 18.5%;
+width: 100%;
 min-width: 705px;
 background-color: #a484ac;
 color: black;

@@ -206,7 +206,7 @@ st.write('\n')
 col1, col2, col3 = st.columns(3)
 
 with col2:
-    st.image("portrait_circle_black.jpg", width=200, caption="Thank you for visiting!")
+    st.image("professional_smile.png", width=200, caption="Thank you for visiting!")
 
 st.divider()
 
