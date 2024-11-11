@@ -47,17 +47,22 @@ st.write(text_str1)
 
 
 
+mode = st.toggle(label="View MIV plume density as ratio of background density:", value=True, label_visibility="visible")
+
+
+
+
 ##########################################################
 ###### SLIDERS / UI                        ###############
 
 st.divider()
 
-if mode == "MIV release":
+if mode == 0:
 
     text_str2 = "Use the two sliders to set values for these two parameters, and watch the how the MIV released Helium disperses into the exosphere over time!"
     st.subheader(text_str2, anchor=None, help=None, divider=False)
 
-elif mode == "BG ratio":
+elif mode == 1:
 
     text_str2 = "Use the two sliders to set values for these two parameters, and watch the how (and if) the released Helium can be seen against the steady state Helium exosphere!"
     st.subheader(text_str2, anchor=None, help=None, divider=False)
@@ -79,7 +84,7 @@ st.write("\n")
 
 
 st.write("Use the Control Bar of the HTML to start replay of the animation.")
-if mode == "BG ratio":
+if mode == 1:
     st.write("Hint: If you are not seeing any signature, you may need to change your input parameters!")
 st.write('\n')
 
@@ -119,15 +124,12 @@ def animate(frame, grid_dict, mappable, txt):
     Dt = scaling_factor*(Gt)/100**3
 
 
-    if mode == "MIV release":
+    if mode == 0:
 
         mappable.set_array(Dt.ravel())
-        Dt[Dt<=1] = np.nan
-        Dt[:, 0] = np.nan
-        Dt[:, -1] = np.nan
 
 
-    elif mode == "BG ratio":
+    elif mode == 1:
 
         ratio = Dt/BG
         ratio[ratio<=1] = 1.0
@@ -220,12 +222,12 @@ ax.text(0.75, 0.95, textstr, transform=ax.transAxes, fontsize=11,
         verticalalignment='top', bbox=props)
 
 
-if mode == "MIV release":
+if mode == 0:
     cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=1.0, vmax=1.0E4))
     cbar = plt.colorbar(cmp, orientation='horizontal', pad=-0.05)
     cbar.ax.set_xlabel('MIV released helium plume into exosphere', rotation=0)
 
-elif mode == "BG ratio":
+elif mode == 1:
     cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=0.9, vmax=1.0E2))
     cbar = plt.colorbar(cmp, orientation='horizontal', pad=-0.05)
     cbar.ax.set_xlabel('Helium enrichment w.r.t. background [-]', rotation=0)
@@ -249,7 +251,7 @@ with ani_column:
 
 st.divider()
 
-if mode == "BG ratio":
+if mode == 1:
     st.write("From this analysis we can conclude that typical 0.5-1m sized impactors can create a significant enhancement Helium exosphere, the temporal and spatial extend of which depends on the Helium Source Volume. "
             "With Helium release from all melt and ejecta (i.e. x100), a 0.5m object creates is visible at a detectable signature over an extend of +/- 30$^\circ$, which exists for a few thousand seconds within our domain of interest.")
 
