@@ -13,6 +13,12 @@ import streamlit.components.v1 as components
 
 
 
+##########################################################
+###### MODE                                ###############
+
+mode = "MIV release"
+#mode = "BG ratio"
+
 
 ##########################################################
 ###### LAYOUT                              ###############
@@ -46,8 +52,15 @@ st.write(text_str1)
 
 st.divider()
 
-text_str2 = "Use the two sliders to set values for these two parameters, and watch the how (and if) the released Helium can be seen against the steady state Helium exosphere!"
-st.subheader(text_str2, anchor=None, help=None, divider=False)
+if mode == "MIV release":
+
+    text_str2 = "Use the two sliders to set values for these two parameters, and watch the how the MIV released Helium disperses into the exosphere over time!"
+    st.subheader(text_str2, anchor=None, help=None, divider=False)
+
+elif mode == "BG ratio":
+
+    text_str2 = "Use the two sliders to set values for these two parameters, and watch the how (and if) the released Helium can be seen against the steady state Helium exosphere!"
+    st.subheader(text_str2, anchor=None, help=None, divider=False)
 
 
 
@@ -66,7 +79,8 @@ st.write("\n")
 
 
 st.write("Use the Control Bar of the HTML to start replay of the animation.")
-st.write("Hint: If you are not seeing any signature, you may need to change your input parameters!")
+if mode == "BG ratio":
+    st.write("Hint: If you are not seeing any signature, you may need to change your input parameters!")
 st.write('\n')
 
 
@@ -103,14 +117,24 @@ def animate(frame, grid_dict, mappable, txt):
     Gt = grid_dict[frame]
 
     Dt = scaling_factor*(Gt)/100**3
-    ratio = Dt/BG
-    ratio[ratio<=1] = 1.0
-    ratio[:, 0] = 1.0
-    ratio[:, -1] = 1.0
 
 
-    #mappable.set_data(ratio)
-    mappable.set_array(ratio.ravel())
+    if mode == "MIV release":
+
+        mappable.set_array(Dt.ravel())
+
+
+    elif mode == "BG ratio":
+
+        ratio = Dt/BG
+        ratio[ratio<=1] = 1.0
+        ratio[:, 0] = 1.0
+        ratio[:, -1] = 1.0
+        # mappable.set_data(ratio)
+        mappable.set_array(ratio.ravel())
+
+
+
     txt.set_text(f"t: {round(frame)} s")
     return mappable, txt, 
 
@@ -193,12 +217,19 @@ ax.text(0.75, 0.95, textstr, transform=ax.transAxes, fontsize=11,
         verticalalignment='top', bbox=props)
 
 
-cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=0.9, vmax=1.0E2))
+if mode == "MIV release":
+    cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=1.0E4, vmax=1.0E10))
+    cbar = plt.colorbar(cmp, orientation='horizontal', pad=-0.05)
+    cbar.ax.set_xlabel('MIV released helium plume into exosphere', rotation=0)
+
+elif mode == "BG ratio":
+    cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=0.9, vmax=1.0E2))
+    cbar = plt.colorbar(cmp, orientation='horizontal', pad=-0.05)
+    cbar.ax.set_xlabel('Helium enrichment w.r.t. background [-]', rotation=0)
+
+
 
 dyna_txt = ax.text(0.15, -0.22, f"t: {int(0)} s", transform=ax.transAxes)
-
-cbar = plt.colorbar(cmp, orientation='horizontal', pad=-0.05)
-cbar.ax.set_xlabel('Helium enrichment w.r.t. background [-]', rotation=0)
 
 
 
@@ -216,8 +247,9 @@ with ani_column:
 
 st.divider()
 
-st.write("From this analysis we can conclude that typical 0.5-1m sized impactors can create a significant enhancement Helium exosphere, the temporal and spatial extend of which depends on the Helium Source Volume. "
-         "With Helium release from all melt and ejecta (i.e. x100), a 0.5m object creates is visible at a detectable signature over an extend of +/- 30$^\circ$, which exists for a few thousand seconds within our domain of interest.")
+if mode == "BG ratio":
+    st.write("From this analysis we can conclude that typical 0.5-1m sized impactors can create a significant enhancement Helium exosphere, the temporal and spatial extend of which depends on the Helium Source Volume. "
+            "With Helium release from all melt and ejecta (i.e. x100), a 0.5m object creates is visible at a detectable signature over an extend of +/- 30$^\circ$, which exists for a few thousand seconds within our domain of interest.")
 
 
 
