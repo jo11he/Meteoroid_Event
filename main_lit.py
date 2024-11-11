@@ -226,7 +226,7 @@ ax.text(0.75, 0.95, textstr, transform=ax.transAxes, fontsize=11,
 if mode == 0:
     cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=1.0, vmax=1.0E4))
     cbar = plt.colorbar(cmp, orientation='horizontal', pad=-0.05)
-    cbar.ax.set_xlabel('MIV released helium plume into exosphere [cm^-3]', rotation=0)
+    cbar.ax.set_xlabel('MIV released helium plume into exosphere [cm$^-3$]', rotation=0)
 
 elif mode == 1:
     cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=0.9, vmax=1.0E2))
