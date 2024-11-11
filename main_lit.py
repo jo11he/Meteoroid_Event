@@ -122,9 +122,9 @@ def animate(frame, grid_dict, mappable, txt):
     if mode == "MIV release":
 
         mappable.set_array(Dt.ravel())
-        Dt[Dt<=1] = 1.0
-        Dt[:, 0] = 1.0
-        Dt[:, -1] = 1.0
+        Dt[Dt<=1] = 0
+        Dt[:, 0] = 0
+        Dt[:, -1] = 0
 
 
     elif mode == "BG ratio":
@@ -229,7 +229,6 @@ elif mode == "BG ratio":
     cmp = ax.pcolormesh(np.deg2rad(ext_psi_angles),radial_steps, D0, norm=matplotlib.colors.LogNorm(vmin=0.9, vmax=1.0E2))
     cbar = plt.colorbar(cmp, orientation='horizontal', pad=-0.05)
     cbar.ax.set_xlabel('Helium enrichment w.r.t. background [-]', rotation=0)
-
 
 
 dyna_txt = ax.text(0.15, -0.22, f"t: {int(0)} s", transform=ax.transAxes)
