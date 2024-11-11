@@ -125,7 +125,8 @@ def animate(frame, grid_dict, mappable, txt):
 
 
     if mode == 0:
-
+        Dt[:, 0] = 0.0
+        Dt[:, -1] = 0.0
         mappable.set_array(Dt.ravel())
 
 
