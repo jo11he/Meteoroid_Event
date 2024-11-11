@@ -122,9 +122,9 @@ def animate(frame, grid_dict, mappable, txt):
     if mode == "MIV release":
 
         mappable.set_array(Dt.ravel())
-        Dt[Dt<=1] = -3
-        Dt[:, 0] = -3
-        Dt[:, -1] = -3
+        Dt[Dt<=1] = np.nan
+        Dt[:, 0] = np.nan
+        Dt[:, -1] = np.nan
 
 
     elif mode == "BG ratio":
